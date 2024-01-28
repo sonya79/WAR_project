@@ -1,0 +1,15 @@
+---
+- name: Deploy WAR to Tomcat Docker Container
+  hosts: localhost
+  connection: local
+  become: yes
+  tasks:
+    - name: Copy WAR file to Tomcat container
+      ansible.builtin.command:
+        cmd: docker cp /home/eldarovasonyagm/WAR_project/target/hello-world-1.0.war my-tomcat-container:/usr/local/tomcat/webapps/
+
+    - name: Restart Tomcat container
+      ansible.builtin.command:
+        cmd: docker restart my-tomcat-container
+      args:
+        executable: /bin/bash

@@ -1,0 +1,26 @@
+x---
+- name: Build WAR from Maven project
+  hosts: localhost
+  connection: local
+  vars:
+    git_repo: "https://github.com/sonya79/WAR_project.git"  # Ensure this is correctly set
+    project_dir: "/tmp/hello-world-app"
+  tasks:
+    - name: Ensure the project directory exists
+      ansible.builtin.file:
+        path: "{{ project_dir }}"
+        state: directory
+
+    - name: Clone the project repository
+      ansible.builtin.git:
+        repo: "{{ git_repo }}"  # Uses the variable defined in vars
+        dest: "{{ project_dir }}"
+        force: yes
+      become: no
+
+    - name: Build the project with Maven
+      ansible.builtin.shell: mvn clean package -DskipTests
+      args:
+        chdir: "{{ project_dir }}"
+      become: no
+
