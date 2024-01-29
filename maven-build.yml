@@ -3,7 +3,7 @@
   hosts: localhost
   connection: local
   vars:
-    git_repo: "https://github.com/sonya79/WAR_project.git"  # Ensure this is correctly set
+    git_repo: "https://github.com/sonya79/WAR_project.git"  
     project_dir: "/tmp/hello-world-app"
   tasks:
     - name: Ensure the project directory exists
@@ -13,7 +13,7 @@
 
     - name: Clone the project repository
       ansible.builtin.git:
-        repo: "{{ git_repo }}"  # Uses the variable defined in vars
+        repo: "{{ git_repo }}" 
         dest: "{{ project_dir }}"
         force: yes
       become: no
