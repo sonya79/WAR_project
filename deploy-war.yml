@@ -2,7 +2,7 @@
 - name: Deploy WAR to Tomcat Docker Container
   hosts: localhost
   connection: local
-  become: yes
+  become: no
   tasks:
     - name: Copy WAR file to Tomcat container
       ansible.builtin.command:
