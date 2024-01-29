@@ -1,4 +1,4 @@
-x---
+---
 - name: Build WAR from Maven project
   hosts: localhost
   connection: local

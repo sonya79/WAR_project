@@ -11,5 +11,4 @@
     - name: Restart Tomcat container
       ansible.builtin.command:
         cmd: docker restart my-tomcat-container
-      args:
-        executable: /bin/bash
+     
