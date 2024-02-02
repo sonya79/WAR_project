@@ -1,14 +1,39 @@
----
 - name: Deploy WAR to Tomcat Docker Container
   hosts: localhost
   connection: local
   become: no
+  vars:
+    war_file: "/home/eldarovasonyagm/WAR_project/target/hello-world-1.0.war"
+    war_extract_dir: "/tmp/war_extract"
   tasks:
+    - name: Create directory to extract WAR
+      ansible.builtin.file:
+        path: "{{ war_extract_dir }}"
+        state: directory
+
+    - name: Extract WAR file
+      ansible.builtin.unarchive:
+        src: "{{ war_file }}"
+        dest: "{{ war_extract_dir }}"
+        remote_src: yes
+
+    - name: Repackage WAR file
+      ansible.builtin.command:
+        cmd: "jar -cvf {{ war_file }} -C {{ war_extract_dir }} ."
+      args:
+        chdir: "{{ war_extract_dir }}"
+
     - name: Copy WAR file to Tomcat container
       ansible.builtin.command:
-        cmd: docker cp /home/eldarovasonyagm/WAR_project/target/hello-world-1.0.war my-tomcat-container:/usr/local/tomcat/webapps/
+        cmd: "docker cp {{ war_file }} my-tomcat-container:/usr/local/tomcat/webapps/"
 
     - name: Restart Tomcat container
       ansible.builtin.command:
-        cmd: docker restart my-tomcat-container
+        cmd: "docker restart my-tomcat-container"
+
+    - name: Clean up extracted WAR directory
+      ansible.builtin.file:
+        path: "{{ war_extract_dir }}"
+        state: absent
+
      
